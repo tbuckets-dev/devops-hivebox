@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # Add the application code to the container
-ADD hivebox.py .
+ADD app.py .
 
 # Command to run the application
-CMD ["python", "./hivebox.py"]
+CMD ["python", "./app.py"]

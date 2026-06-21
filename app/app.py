@@ -1,3 +1,8 @@
+"""
+HiveBox API - A DevOps tooling API
+version 0.1.0
+"""
+
 import random
 from datetime import datetime, timezone, timedelta
 from flask import Flask
@@ -8,6 +13,8 @@ app = Flask(__name__)
 # OpenSenseMap API base URL
 OPENSENSEMAP_API = "https://api.opensensemap.org"
 
+"Get temperature boxes from OpenSenseMap"
+
 
 def get_temperature_boxes():
     """Fetch senseBoxes that have temperature sensors with recent data."""
@@ -15,17 +22,16 @@ def get_temperature_boxes():
 
     # Use date parameter to get only boxes with recent measurements (last hour)
     one_hour_ago = datetime.now(timezone.utc) - timedelta(hours=1)
-    date_str = one_hour_ago.strftime('%Y-%m-%dT%H:%M:%SZ')
+    date_str = one_hour_ago.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    params = {
-        "phenomenon": "temperature",
-        "date": date_str,
-        "format": "json"
-    }
+    params = {"phenomenon": "temperature", "date": date_str, "format": "json"}
 
     response = requests.get(url, params=params, timeout=30)
     response.raise_for_status()
     return response.json()
+
+
+"Get latest temperature from a senseBox"
 
 
 def get_latest_temperature(box):
@@ -43,6 +49,9 @@ def get_latest_temperature(box):
                     except (ValueError, TypeError):
                         continue
     return None
+
+
+"Get average temperature from random OpenSenseMap boxes"
 
 
 def get_average_temperature_from_boxes(num_boxes=3):
@@ -72,13 +81,24 @@ def get_average_temperature_from_boxes(num_boxes=3):
 
     return avg_temp, None
 
+
+"Main route for the hivebox API that returns a welcome message"
+
+
 @app.route("/")
 def main():
-	return "Welcome to your hivebox"
+    return "<p>Welcome to your HiveBox</p>"
+
+
+"Version route for the hivebox API"
+
 
 @app.route("/version")
 def version():
     return "<p>Version: 0.1.0</p>"
+
+
+"Temperature route for the hivebox API that returns the average temperature from 3 random OpenSenseMap boxes"
 
 
 @app.route("/temp")
@@ -91,5 +111,7 @@ def temperature():
 
     return f"<p>Average Temperature: {avg_temp:.2f}°C</p>"
 
+
+"Run the application"
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)

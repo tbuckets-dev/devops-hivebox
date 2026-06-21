@@ -13,9 +13,6 @@ app = Flask(__name__)
 # OpenSenseMap API base URL
 OPENSENSEMAP_API = "https://api.opensensemap.org"
 
-"Get temperature boxes from OpenSenseMap"
-
-
 def get_temperature_boxes():
     """Fetch senseBoxes that have temperature sensors with recent data."""
     url = f"{OPENSENSEMAP_API}/boxes"
@@ -29,9 +26,6 @@ def get_temperature_boxes():
     response = requests.get(url, params=params, timeout=30)
     response.raise_for_status()
     return response.json()
-
-
-"Get latest temperature from a senseBox"
 
 
 def get_latest_temperature(box):
@@ -49,9 +43,6 @@ def get_latest_temperature(box):
                     except (ValueError, TypeError):
                         continue
     return None
-
-
-"Get average temperature from random OpenSenseMap boxes"
 
 
 def get_average_temperature_from_boxes(num_boxes=3):
@@ -82,23 +73,16 @@ def get_average_temperature_from_boxes(num_boxes=3):
     return avg_temp, None
 
 
-"Main route for the hivebox API that returns a welcome message"
-
-
 @app.route("/")
 def main():
+    """Main route for the hivebox API that returns a welcome message."""
     return "<p>Welcome to your HiveBox</p>"
-
-
-"Version route for the hivebox API"
 
 
 @app.route("/version")
 def version():
+    """Version route for the hivebox API."""
     return "<p>Version: 0.1.0</p>"
-
-
-"Temperature route for the hivebox API that returns the average temperature from 3 random OpenSenseMap boxes"
 
 
 @app.route("/temp")
@@ -112,6 +96,5 @@ def temperature():
     return f"<p>Average Temperature: {avg_temp:.2f}°C</p>"
 
 
-"Run the application"
 if __name__ == "__main__":
     app.run(debug=True)

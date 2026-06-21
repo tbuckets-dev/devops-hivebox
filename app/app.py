@@ -1,3 +1,8 @@
+"""
+HiveBox API - A DevOps tooling API
+version 0.1.0
+"""
+
 import random
 from datetime import datetime, timezone, timedelta
 from flask import Flask
@@ -8,20 +13,15 @@ app = Flask(__name__)
 # OpenSenseMap API base URL
 OPENSENSEMAP_API = "https://api.opensensemap.org"
 
-
 def get_temperature_boxes():
     """Fetch senseBoxes that have temperature sensors with recent data."""
     url = f"{OPENSENSEMAP_API}/boxes"
 
     # Use date parameter to get only boxes with recent measurements (last hour)
     one_hour_ago = datetime.now(timezone.utc) - timedelta(hours=1)
-    date_str = one_hour_ago.strftime('%Y-%m-%dT%H:%M:%SZ')
+    date_str = one_hour_ago.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    params = {
-        "phenomenon": "temperature",
-        "date": date_str,
-        "format": "json"
-    }
+    params = {"phenomenon": "temperature", "date": date_str, "format": "json"}
 
     response = requests.get(url, params=params, timeout=30)
     response.raise_for_status()
@@ -72,12 +72,16 @@ def get_average_temperature_from_boxes(num_boxes=3):
 
     return avg_temp, None
 
+
 @app.route("/")
 def main():
-	return "Welcome to your hivebox"
+    """Main route for the hivebox API that returns a welcome message."""
+    return "<p>Welcome to your HiveBox</p>"
+
 
 @app.route("/version")
 def version():
+    """Version route for the hivebox API."""
     return "<p>Version: 0.1.0</p>"
 
 
@@ -91,5 +95,6 @@ def temperature():
 
     return f"<p>Average Temperature: {avg_temp:.2f}°C</p>"
 
+
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)
